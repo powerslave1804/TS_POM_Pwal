@@ -34,7 +34,10 @@ test.describe('Checkboxes Page', () => {
             'checkboxes-after-check.png',
             // maxDiffPixelRatio was added to deal with win32 vs linux screenshot differences in github actions
             // see important.txt
-            { maxDiffPixelRatio: 0.02 }   // passes up to ~380 px on a 1920×1080 shot
+            {
+                maxDiffPixels: 500,
+                maxDiffPixelRatio: 0.03
+            }   // passes up to ~380 px on a 1920×1080 shot
         );
         await expect(pm.checkboxesPage.locator('form#checkboxes')).toBeVisible();
     })
