@@ -24,6 +24,18 @@ test.describe('Checkboxes Page', () => {
         await pm.checkboxesPage.checkFirstCheckbox()
 
         await expect(page).toHaveScreenshot('checkboxes-after-check.png')
+        // ── About `page` below ───────────────────────────────────────────
+        // • `page` comes from Playwright’s BUILT-IN fixture; 
+        // our pom.fixture merely extends the default set, so `page`, `context`, etc. are still available.
+        // • It is the exact SAME tab that PomManager is working on.
+        // • Safe to use for one-off utilities (screenshot, tracing, network intercepts).  It does *not* open a new tab or context.
+        // • Keep business interactions (click, fill, asserts) inside POM.
+        await expect(page).toHaveScreenshot(
+            'checkboxes-after-check.png',
+            // maxDiffPixelRatio was added to deal with win32 vs linux screenshot differences in github actions
+            // see important.txt
+            { maxDiffPixelRatio: 0.02 }   // passes up to ~380 px on a 1920×1080 shot
+        );
         await expect(pm.checkboxesPage.locator('form#checkboxes')).toBeVisible();
     })
 
@@ -34,7 +46,7 @@ test.describe('Checkboxes Page', () => {
     //     await mp.checkboxesPage.assertCheckboxState(false, false)
     // })
 
-        test('Uncheck both checkboxes', async ({ pm, page}) => {
+    test('Uncheck both checkboxes', async ({ pm, page }) => {
         await pm.checkboxesPage.openCheckboxesPage()
         await pm.checkboxesPage.uncheckFirstCheckbox()
         await pm.checkboxesPage.uncheckSecondCheckbox()
